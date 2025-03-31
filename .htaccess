@@ -1,0 +1,23 @@
+# فعال‌سازی mod_rewrite
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # اجباری کردن www
+  RewriteCond %{HTTP_HOST} ^hmtch\.ir [NC]
+  RewriteRule ^(.*)$ https://www.hmtch.ir/$1 [L,R=301]
+
+  # اطمینان از استفاده از HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
+
+  # اگر فایل یا پوشه‌ای وجود ندارد، به index.php ارجاع دهد (در صورت نیاز)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.php [L]
+</IfModule>
+
+# کش مرورگر (برای جلوگیری از کش فرم لاگین یا CSS قدیمی)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 day"
+</IfModule>
